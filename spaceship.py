@@ -11,7 +11,7 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # Title and Icon
-pygame.display.set_caption("Space Invaders")
+pygame.display.set_caption("Space Shooter")
 icon = pygame.image.load("ufo.png") 
 pygame.display.set_icon(icon)
 
