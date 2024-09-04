@@ -5,40 +5,40 @@ import math
 # Initialize Pygame
 pygame.init()
 
-# Create the screen
+# Creating the screen
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # Title and Icon
 pygame.display.set_caption("Space Invaders")
-icon = pygame.image.load("ufo.png")  # Replace with your own icon
+icon = pygame.image.load("ufo.png") 
 pygame.display.set_icon(icon)
 
-# Player
-player_img = pygame.image.load("spaceship.png")  # Replace with your own player image
+# Loading player image and position
+player_img = pygame.image.load("spaceship.png")  
 player_x = 370
 player_y = 480
 player_x_change = 0
 
-# alien2
-alien2_img = []
-alien2_x = []
-alien2_y = []
-alien2_x_change = []
-alien2_y_change = []
+# alien
+alien_img = []
+alien_x = []
+alien_y = []
+alien_x_change = []
+alien_y_change = []
 num_of_enemies = 6
 
 def init_enemies():
     for i in range(num_of_enemies):
-        alien2_img.append(pygame.image.load("alien2.png"))  # Replace with your own alien2 image
-        alien2_x.append(random.randint(0, 736))
-        alien2_y.append(random.randint(50, 150))
-        alien2_x_change.append(1)
-        alien2_y_change.append(20)
+        alien_img.append(pygame.image.load("alien.png")) 
+        alien_x.append(random.randint(0, 736))
+        alien_y.append(random.randint(50, 150))
+        alien_x_change.append(1)
+        alien_y_change.append(20)
 
-# Bullet
-bullet_img = pygame.image.load("bullet.png")  # Replace with your own bullet image
+# Loading bullet image and position
+bullet_img = pygame.image.load("bullet.png") 
 bullet_x = 0
 bullet_y = 480
 bullet_x_change = 0
@@ -59,6 +59,7 @@ start_ticks = pygame.time.get_ticks()  # Start counting ticks
 # Game Over
 over_font = pygame.font.Font('freesansbold.ttf', 64)
 
+#when player chooses to reset game
 def reset_game():
     global player_x, player_x_change, bullet_x, bullet_y, bullet_state, score_value, start_ticks
     player_x = 370
@@ -68,29 +69,34 @@ def reset_game():
     bullet_state = "ready"
     score_value = 0
     start_ticks = pygame.time.get_ticks()
-    alien2_img.clear()
-    alien2_x.clear()
-    alien2_y.clear()
-    alien2_x_change.clear()
-    alien2_y_change.clear()
+    alien_img.clear()
+    alien_x.clear()
+    alien_y.clear()
+    alien_x_change.clear()
+    alien_y_change.clear()
     init_enemies()
 
+#score
 def show_score(x, y):
     score = font.render("Score : " + str(score_value), True, (255, 255, 255))
     screen.blit(score, (x, y))
 
+#high score
 def show_high_score(x, y):
     high_score_display = font.render("High Score : " + str(high_score), True, (255, 255, 255))
     screen.blit(high_score_display, (x, y))
 
+#timer
 def show_timer(x, y, time_left):
     timer = font.render("Time : " + str(time_left), True, (255, 255, 255))
     screen.blit(timer, (x, y))
 
+#game over
 def game_over_text():
     over_text = over_font.render("GAME OVER", True, (255, 255, 255))
     screen.blit(over_text, (200, 250))
 
+#restart
 def restart_text():
     restart_msg = font.render("Press 'R' to Restart", True, (255, 255, 255))
     screen.blit(restart_msg, (250, 320))
@@ -98,16 +104,16 @@ def restart_text():
 def player(x, y):
     screen.blit(player_img, (x, y))
 
-def alien2(x, y, i):
-    screen.blit(alien2_img[i], (x, y))
+def alien(x, y, i):
+    screen.blit(alien_img[i], (x, y))
 
 def fire_bullet(x, y):
     global bullet_state
     bullet_state = "fire"
     screen.blit(bullet_img, (x + 43, y + 10))
 
-def is_collision(alien2_x, alien2_y, bullet_x, bullet_y):
-    distance = math.sqrt(math.pow(alien2_x - bullet_x, 2) + math.pow(alien2_y - bullet_y, 2))
+def is_collision(alien_x, alien_y, bullet_x, bullet_y):
+    distance = math.sqrt(math.pow(alien_x - bullet_x, 2) + math.pow(alien_y - bullet_y, 2))
     return distance < 27
 
 # Initialize enemies
@@ -154,31 +160,31 @@ while running:
         elif player_x >= 736:
             player_x = 736
 
-        # alien2 Movement
+        # alien Movement
         for i in range(num_of_enemies):
-            # Game Over if alien2 reaches below certain point
-            if alien2_y[i] > 440:
+            # Game Over if alien reaches below certain point
+            if alien_y[i] > 440:
                 game_over = True
                 break
 
-            alien2_x[i] += alien2_x_change[i]
-            if alien2_x[i] <= 0:
-                alien2_x_change[i] = 1
-                alien2_y[i] += alien2_y_change[i]
-            elif alien2_x[i] >= 736:
-                alien2_x_change[i] = -1
-                alien2_y[i] += alien2_y_change[i]
+            alien_x[i] += alien_x_change[i]
+            if alien_x[i] <= 0:
+                alien_x_change[i] = 1
+                alien_y[i] += alien_y_change[i]
+            elif alien_x[i] >= 736:
+                alien_x_change[i] = -1
+                alien_y[i] += alien_y_change[i]
 
             # Collision
-            collision = is_collision(alien2_x[i], alien2_y[i], bullet_x, bullet_y)
+            collision = is_collision(alien_x[i], alien_y[i], bullet_x, bullet_y)
             if collision:
                 bullet_y = 480
                 bullet_state = "ready"
                 score_value += 1
-                alien2_x[i] = random.randint(0, 736)
-                alien2_y[i] = random.randint(50, 150)
+                alien_x[i] = random.randint(0, 736)
+                alien_y[i] = random.randint(50, 150)
 
-            alien2(alien2_x[i], alien2_y[i], i)
+            alien(alien_x[i], alien_y[i], i)
 
         # Bullet Movement
         if bullet_y <= 0:
